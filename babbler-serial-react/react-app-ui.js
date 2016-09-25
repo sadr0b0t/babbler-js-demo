@@ -86,7 +86,9 @@ var BabblerLedControlPnl = React.createClass({
           this.props.babblerDevice.sendCmd("ledon", [],
               // onReply
               function(cmd, id, reply) {
-                  this.setState({ledOn: true, reply: reply});
+                  if(reply == 'ok') {
+                      this.setState({ledOn: true});
+                  }
               }.bind(this),
               // onError
               function(cmd, msg) {
@@ -99,7 +101,9 @@ var BabblerLedControlPnl = React.createClass({
           this.props.babblerDevice.sendCmd("ledoff", [],
               // onReply
               function(cmd, id, reply) {
-                  this.setState({ledOn: false, reply: reply});
+                  if(reply == 'ok') {
+                      this.setState({ledOn: false});
+                  }
               }.bind(this),
               // onError
               function(cmd, msg) {
