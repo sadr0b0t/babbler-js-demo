@@ -2,14 +2,18 @@
 var BabblerDevice = require('../../babbler-js/src/babbler');
 
 var babblerDevice = new BabblerDevice(
-    function onStatusChange(status) {
+    // onStatusChange
+    function(status) {
         if(status === BabblerDevice.Status.DISCONNECTED) {
             console.log("disconnected");
+            
+            setTimeout(function() {
+                babblerDevice.connect("/dev/ttyUSB0");
+            }, 3000);
         } else if(status === BabblerDevice.Status.CONNECTING) {
             console.log("connecting...");
         } else if(status === BabblerDevice.Status.CONNECTED) {
             console.log("connected");
-            
             
             babblerDevice.sendCmd("ping", [],
                 // onReply
@@ -22,16 +26,16 @@ var babblerDevice = new BabblerDevice(
                     console.log(cmd + ": " + msg);
                 }
             );
-                  
+            
             babblerDevice.sendCmd("help", ["--list"],
                 // onReply
                 function(cmd, id, data) {
                     //document.getElementById('serial_read_data').innerHTML += cmd + ", id=" + id + ': ' + data + "\n";
                 },
                 // onError
-                function(cmd, msg) {
-                    //document.getElementById('serial_read_data').innerHTML += cmd + ": " + msg + "\n";
-                    console.log(cmd + ": " + msg);
+                function(cmd, err) {
+                    //document.getElementById('serial_read_data').innerHTML += cmd + ": " + err + "\n";
+                    console.log(cmd + ": " + err);
                 }
             );
         }
@@ -42,19 +46,16 @@ var babblerDevice = new BabblerDevice(
     }
 );
 
-babblerDevice.addOnDataListener(function onData(data, dir) {
+babblerDevice.on('status', function(status) {
+    console.log("status: " + status);
+});
+
+babblerDevice.on('data', function(data, dir, err) {
+    if(err != undefined) {
+        console.log("error: " + err);
+    }
     console.log(dir + ": " + data);
 });
 
-babblerDevice.connect("/dev/ttyUSB0", 
-    //onData
-    function(data) {
-        console.log("data: " + data);
-    },
-    //onDataError
-    function(data, error) {
-        console.log("error here: " + error);
-    }
-);
-
+babblerDevice.connect("/dev/ttyUSB0");
 
