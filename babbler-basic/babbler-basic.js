@@ -7,6 +7,11 @@ var babblerDevice = new BabblerDevice(
         if(status === BabblerDevice.Status.DISCONNECTED) {
             console.log("disconnected");
             
+            if(babblerDevice.deviceError() != undefined) {
+                console.log(" (" + babblerDevice.deviceError() + ")");
+            }
+            
+            // повторная попытка подключиться через 3 секунды
             setTimeout(function() {
                 babblerDevice.connect("/dev/ttyUSB0");
             }, 3000);
@@ -18,38 +23,32 @@ var babblerDevice = new BabblerDevice(
             babblerDevice.sendCmd("ping", [],
                 // onReply
                 function(cmd, id, reply) {
-                    //document.getElementById('serial_read_data').innerHTML += cmd + ", id=" + id + ': ' + reply + "\n";
                 },
                 // onError
-                function(cmd, msg) {
-                    //document.getElementById('serial_read_data').innerHTML += cmd + ": " + msg + "\n";
-                    console.log(cmd + ": " + msg);
+                function(cmd, err) {
+                    console.log(cmd + ": " + err);
                 }
             );
             
             babblerDevice.sendCmd("help", ["--list"],
                 // onReply
-                function(cmd, id, data) {
-                    //document.getElementById('serial_read_data').innerHTML += cmd + ", id=" + id + ': ' + data + "\n";
+                function(cmd, id, reply) {
                 },
                 // onError
                 function(cmd, err) {
-                    //document.getElementById('serial_read_data').innerHTML += cmd + ": " + err + "\n";
                     console.log(cmd + ": " + err);
                 }
             );
         }
-
-        if(status === BabblerDevice.Status.DISCONNECTED && babblerDevice.deviceError() != undefined) {
-            console.log(" (" + babblerDevice.deviceError() + ")");
-        }
     }
 );
 
+// статус можно слушать так тоже
 babblerDevice.on('status', function(status) {
     console.log("status: " + status);
 });
 
+// для отладки - следим за потоками данных
 babblerDevice.on('data', function(data, dir, err) {
     if(err != undefined) {
         console.log("error: " + err);
@@ -58,4 +57,5 @@ babblerDevice.on('data', function(data, dir, err) {
 });
 
 babblerDevice.connect("/dev/ttyUSB0");
+//babblerDevice.connect("/dev/ttyUSB0", {baudRate: 9600});
 
