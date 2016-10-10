@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "main": "main.js",
   "dependencies": {
-    "babbler-js": "^0.1.0",
-    "babbler-js-material-ui": "^0.1.0",
+    "babbler-js": "^0.2.0",
+    "babbler-js-material-ui": "^0.2.1",
     "electron-prebuilt": "1.1.3",
     "material-ui": "^0.15.4",
     "react": "^15.3.2",
