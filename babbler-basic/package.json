@@ -1,9 +1,9 @@
 {
   "name"    : "babbler-basic",
-  "version" : "0.1.0",
+  "version" : "0.2.0",
   "main"    : "babbler-basic.js",
   "dependencies": {
-    "babbler-js": "^0.1.0",
+    "babbler-js": "^0.2.0",
     "serialport": "^4.0.1"
   },
   "devDependencies": {

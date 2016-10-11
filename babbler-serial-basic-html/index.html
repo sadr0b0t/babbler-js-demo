@@ -16,7 +16,8 @@
     
     <script type="text/javascript">
       var babblerDevice = new BabblerDevice(
-          function onStatusChange(status) {
+          // onStatusChange
+          function(status) {
               if(status === BabblerDevice.Status.DISCONNECTED) {
                   document.getElementById('bblr-serial-disconnected-pnl').style.display = "block";
                   document.getElementById('bblr-serial-connecting-pnl').style.display = "none";
