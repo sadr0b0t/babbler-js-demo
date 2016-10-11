@@ -1,5 +1,5 @@
+// react-app-ui.js
 
-// bblr-connect.js
 var React = require('react');
 var ReactDOM = require('react-dom');
 
@@ -22,6 +22,8 @@ import Subheader from 'material-ui/Subheader';
 // - Импортируем babbler.js и виджеты напрямую из исходников,
 // а не из скомпилированных/установленных модулей, чтобы можно 
 // было обновлять изменения прямо на лету в окне приложения с ctrl+R.
+// - Репозитории babbler-js и babbler-js-material-ui должны быть
+// клонированы на одном уровне с текущим репозиторием.
 // - В репозиториях babbler-js и babbler-js-material-ui нужно удалить
 // или переименовать каталог node_modules, если он был там создан,
 // иначе получим предупреждение о том, что в приложение загружено
@@ -34,6 +36,14 @@ import Subheader from 'material-ui/Subheader';
 // объектом babblerDevice, который мы туда передадим (т.е. с последней
 // исправленной версией), зависимость нужна там только для некоторых 
 // констант с именами событий.
+// - Если разрабатываемая версия babbler-js-material-ui все-таки требует 
+// последней разрабатываемой версии babbler-js, можно заменить установленный
+// пакет babbler-js на локальную ссылку:
+//     npm link babbler-js
+// внутри самого проекта babbler-js нужно выполнить
+//     npm run-script build
+// чтобы исходники src/babbler.js конвертировались lib/babbler.js 
+// (файлы внутри библиотеки подгружаются именно из lib, не из src)
 
 // Babbler.js
 import BabblerDevice from '../../babbler-js/src/babbler';
@@ -95,14 +105,14 @@ var BabblerLedControlPnl = React.createClass({
     cmdLedon: function() {
           this.props.babblerDevice.sendCmd("ledon", [],
               // onReply
-              function(cmd, id, reply) {
+              function(cmd, params, reply) {
                   if(reply == 'ok') {
                       this.setState({ledOn: true});
                   }
               }.bind(this),
               // onError
-              function(cmd, msg) {
-                  console.log(cmd + ": " + msg);
+              function(cmd, params, err) {
+                  console.log(cmd + (params.length > 0 ? " " + params : "") + ": " + err);
               }.bind(this)
           );
       }, 
@@ -110,14 +120,14 @@ var BabblerLedControlPnl = React.createClass({
       cmdLedoff: function() {
           this.props.babblerDevice.sendCmd("ledoff", [],
               // onReply
-              function(cmd, id, reply) {
+              function(cmd, params, reply) {
                   if(reply == 'ok') {
                       this.setState({ledOn: false});
                   }
               }.bind(this),
               // onError
-              function(cmd, msg) {
-                  console.log(cmd + ": " + msg);
+              function(cmd, params, err) {
+                  console.log(cmd + (params.length > 0 ? " " + params : "") + ": " + err);
               }.bind(this)
           );
       }
@@ -212,12 +222,12 @@ var BabblerDebugPnl = React.createClass({
         
         this.props.babblerDevice.sendCmd(cmd, params,
             // onReply
-            function(cmd, id, reply) {
+            function(cmd, params, reply) {
                 this.setState({reply: reply, error: undefined});
             }.bind(this),
             // onError
-            function(cmd, msg) {
-               this.setState({reply: "-", error: msg});
+            function(cmd, params, err) {
+               this.setState({reply: "-", error: err.message});
             }.bind(this)
         );
         this.setState({
@@ -231,12 +241,12 @@ var BabblerDebugPnl = React.createClass({
     cmdPing: function() {
           this.props.babblerDevice.sendCmd("ping", [],
               // onReply
-              function(cmd, id, reply) {
+              function(cmd, params, reply) {
                   this.setState({reply: reply, error: undefined});
               }.bind(this),
               // onError
-              function(cmd, msg) {
-                 this.setState({reply: "-", error: msg});
+              function(cmd, params, err) {
+                 this.setState({reply: "-", error: err.message});
               }.bind(this)
           );
           this.setState({
@@ -249,12 +259,12 @@ var BabblerDebugPnl = React.createClass({
       cmdHelp: function() {
           this.props.babblerDevice.sendCmd("help", ["--list"],
               // onReply
-              function(cmd, id, reply) {
+              function(cmd, params, reply) {
                   this.setState({reply: reply, error: undefined});
               }.bind(this),
               // onError
-              function(cmd, msg) {
-                 this.setState({reply: "-", error: msg});
+              function(cmd, params, err) {
+                 this.setState({reply: "-", error: err.message});
               }.bind(this)
           );
           this.setState({

@@ -9,24 +9,24 @@ babblerDevice.on('connected', function() {
     console.log("send cmd: ping");
     babblerDevice.sendCmd("ping", [],
         // onReply
-        function(cmd, id, reply) {
-            console.log("got reply on '" + cmd + "': " + reply);
+        function(cmd, params, reply) {
+            console.log("got reply on '" + cmd + " " + params + "': " + reply);
         },
         // onError
-        function(cmd, err) {
-            console.log("fail with '" + cmd + "': " + err);
+        function(cmd, params, err) {
+            console.log("fail with '" + cmd + " " + params + "': " + err);
         }
     );
     
     console.log("send cmd: help --list");
     babblerDevice.sendCmd("help", ["--list"],
         // onReply
-        function(cmd, id, reply) {
-            console.log("got reply on '" + cmd + "': " + reply);
+        function(cmd, params, reply) {
+            console.log("got reply on '" + cmd + " " + params + "': " + reply);
         },
         // onError
-        function(cmd, err) {
-            console.log("fail with '" + cmd + "': " + err);
+        function(cmd, params, err) {
+            console.log("fail with '" + cmd + " " + params + "': " + err);
         }
     );
 });

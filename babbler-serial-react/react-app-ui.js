@@ -85,14 +85,14 @@ var BabblerLedControlPnl = React.createClass({
     cmdLedon: function() {
           this.props.babblerDevice.sendCmd("ledon", [],
               // onReply
-              function(cmd, id, reply) {
+              function(cmd, params, reply) {
                   if(reply == 'ok') {
                       this.setState({ledOn: true});
                   }
               }.bind(this),
               // onError
-              function(cmd, msg) {
-                  console.log(cmd + ": " + msg);
+              function(cmd, params, err) {
+                  console.log(cmd + (params.length > 0 ? " " + params : "") + ": " + err);
               }.bind(this)
           );
       }, 
@@ -100,14 +100,14 @@ var BabblerLedControlPnl = React.createClass({
       cmdLedoff: function() {
           this.props.babblerDevice.sendCmd("ledoff", [],
               // onReply
-              function(cmd, id, reply) {
+              function(cmd, params, reply) {
                   if(reply == 'ok') {
                       this.setState({ledOn: false});
                   }
               }.bind(this),
               // onError
-              function(cmd, msg) {
-                  console.log(cmd + ": " + msg);
+              function(cmd, params, err) {
+                  console.log(cmd + (params.length > 0 ? " " + params : "") + ": " + err);
               }.bind(this)
           );
       }
@@ -202,12 +202,12 @@ var BabblerDebugPnl = React.createClass({
         
         this.props.babblerDevice.sendCmd(cmd, params,
             // onReply
-            function(cmd, id, reply) {
+            function(cmd, params, reply) {
                 this.setState({reply: reply, error: undefined});
             }.bind(this),
             // onError
-            function(cmd, msg) {
-               this.setState({reply: "-", error: msg});
+            function(cmd, params, err) {
+               this.setState({reply: "-", error: err.message});
             }.bind(this)
         );
         this.setState({
@@ -221,12 +221,12 @@ var BabblerDebugPnl = React.createClass({
     cmdPing: function() {
           this.props.babblerDevice.sendCmd("ping", [],
               // onReply
-              function(cmd, id, reply) {
+              function(cmd, params, reply) {
                   this.setState({reply: reply, error: undefined});
               }.bind(this),
               // onError
-              function(cmd, msg) {
-                 this.setState({reply: "-", error: msg});
+              function(cmd, params, err) {
+                 this.setState({reply: "-", error: err.message});
               }.bind(this)
           );
           this.setState({
@@ -239,12 +239,12 @@ var BabblerDebugPnl = React.createClass({
       cmdHelp: function() {
           this.props.babblerDevice.sendCmd("help", ["--list"],
               // onReply
-              function(cmd, id, reply) {
+              function(cmd, params, reply) {
                   this.setState({reply: reply, error: undefined});
               }.bind(this),
               // onError
-              function(cmd, msg) {
-                 this.setState({reply: "-", error: msg});
+              function(cmd, params, err) {
+                 this.setState({reply: "-", error: err.message});
               }.bind(this)
           );
           this.setState({

@@ -1,5 +1,5 @@
-//var BabblerDevice = require('babbler-js');
-var BabblerDevice = require('../../babbler-js/src/babbler');
+var BabblerDevice = require('babbler-js');
+//var BabblerDevice = require('../../babbler-js/src/babbler');
 
 var babblerDevice = new BabblerDevice(
     // onStatusChange
@@ -20,23 +20,27 @@ var babblerDevice = new BabblerDevice(
         } else if(status === BabblerDevice.Status.CONNECTED) {
             console.log("connected");
             
+            console.log("send cmd: ping");
             babblerDevice.sendCmd("ping", [],
                 // onReply
-                function(cmd, id, reply) {
+                function(cmd, params, reply) {
+                    console.log("got reply on '" + cmd + " " + params + "': " + reply);
                 },
                 // onError
-                function(cmd, err) {
-                    console.log(cmd + ": " + err);
+                function(cmd, params, err) {
+                    console.log("fail with '" + cmd + " " + params + "': " + err);
                 }
             );
             
+            console.log("send cmd: help --list");
             babblerDevice.sendCmd("help", ["--list"],
                 // onReply
-                function(cmd, id, reply) {
+                function(cmd, params, reply) {
+                    console.log("got reply on '" + cmd + " " + params + "': " + reply);
                 },
                 // onError
-                function(cmd, err) {
-                    console.log(cmd + ": " + err);
+                function(cmd, params, err) {
+                    console.log("fail with '" + cmd + " " + params + "': " + err);
                 }
             );
         }
@@ -49,11 +53,13 @@ babblerDevice.on('status', function(status) {
 });
 
 // для отладки - следим за потоками данных
-babblerDevice.on('data', function(data, dir, err) {
-    if(err != undefined) {
-        console.log("error: " + err);
-    }
+babblerDevice.on('data', function(data, dir) {
     console.log(dir + ": " + data);
+});
+
+babblerDevice.on('data_error', function(data, dir, err) {
+    console.log("error: " + err);
+    console.log(data);
 });
 
 babblerDevice.connect("/dev/ttyUSB0");
