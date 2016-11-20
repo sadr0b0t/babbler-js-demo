@@ -40,6 +40,10 @@ babbler.on('connected', function() {
     }, 3000);
 });
 
+babbler.on('connecting', function() {
+    console.log("connecting...");
+});
+
 babbler.on('disconnected', function(error) {
     console.log("disconnected" + (error != undefined ? ": " + error : ""));
     
