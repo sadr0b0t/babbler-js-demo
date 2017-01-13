@@ -76,17 +76,17 @@
       
       function cmdPing() {
           babblerDevice.sendCmd("ping", [],
-              // onReply
-              function(cmd, params, reply) {
-                  document.getElementById('serial_read_data').innerHTML += 
-                      cmd + (params.length > 0 ? " " + params : "") + ": " + 
-                      reply + "\n";
-              },
-              // onError
-              function(cmd, params, err) {
-                  document.getElementById('serial_read_data').innerHTML += 
-                      cmd + (params.length > 0 ? " " + params : "") + ": " + 
-                  err.message + "\n";
+              // onResult
+              function(err, reply, cmd, params) {
+                  if(err) {
+                      document.getElementById('serial_read_data').innerHTML += 
+                          cmd + (params.length > 0 ? " " + params : "") + ": " + 
+                          err.message + "\n";
+                  } else {
+                      document.getElementById('serial_read_data').innerHTML += 
+                          cmd + (params.length > 0 ? " " + params : "") + ": " + 
+                          reply + "\n";
+                  }
               }
           );
       }
@@ -99,17 +99,17 @@
               params = [];
           }
           babblerDevice.sendCmd("help", params,
-              // onReply
-              function(cmd, params, reply) {
-                  document.getElementById('serial_read_data').innerHTML += 
-                      cmd + (params.length > 0 ? " " + params : "") + ": " + 
-                      reply + "\n";
-              },
-              // onError
-              function(cmd, params, err) {
-                  document.getElementById('serial_read_data').innerHTML += 
-                      cmd + (params.length > 0 ? " " + params : "") + ": " + 
-                  err.message + "\n";
+              // onResult
+              function(err, reply, cmd, params) {
+                  if(err) {
+                      document.getElementById('serial_read_data').innerHTML += 
+                          cmd + (params.length > 0 ? " " + params : "") + ": " + 
+                          err.message + "\n";
+                  } else {
+                      document.getElementById('serial_read_data').innerHTML += 
+                          cmd + (params.length > 0 ? " " + params : "") + ": " + 
+                          reply + "\n";
+                  }
               }
           );
       }

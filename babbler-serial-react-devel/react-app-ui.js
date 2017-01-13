@@ -104,34 +104,34 @@ var BabblerLedControlPnl = React.createClass({
     },
     
     cmdLedon: function() {
-          this.props.babblerDevice.sendCmd("ledon", [],
-              // onReply
-              function(cmd, params, reply) {
-                  if(reply == 'ok') {
-                      this.setState({ledOn: true});
-                  }
-              }.bind(this),
-              // onError
-              function(cmd, params, err) {
-                  console.log(cmd + (params.length > 0 ? " " + params : "") + ": " + err);
-              }.bind(this)
-          );
-      }, 
-      
-      cmdLedoff: function() {
-          this.props.babblerDevice.sendCmd("ledoff", [],
-              // onReply
-              function(cmd, params, reply) {
-                  if(reply == 'ok') {
-                      this.setState({ledOn: false});
-                  }
-              }.bind(this),
-              // onError
-              function(cmd, params, err) {
-                  console.log(cmd + (params.length > 0 ? " " + params : "") + ": " + err);
-              }.bind(this)
-          );
-      }
+        this.props.babblerDevice.sendCmd("ledon", [],
+            // onResult
+            function(err, reply, cmd, params) {
+                if(err) {
+                    console.log(cmd + (params.length > 0 ? " " + params : "") + ": " + err);
+                } else if(reply != 'ok') {
+                    console.log(cmd + (params.length > 0 ? " " + params : "") + ": " + reply);
+                } else { // reply == 'ok'
+                    this.setState({ledOn: true});
+                }
+            }.bind(this)
+        );
+    }, 
+    
+    cmdLedoff: function() {
+        this.props.babblerDevice.sendCmd("ledoff", [],
+            // onResult
+            function(err, reply, cmd, params) {
+                if(err) {
+                    console.log(cmd + (params.length > 0 ? " " + params : "") + ": " + err);
+                } else if(reply != 'ok') {
+                    console.log(cmd + (params.length > 0 ? " " + params : "") + ": " + reply);
+                } else { // reply == 'ok'
+                    this.setState({ledOn: false});
+                }
+            }.bind(this)
+        );
+    }
 });
 
 // Устройство Babbler, подключенное к последовательному порту

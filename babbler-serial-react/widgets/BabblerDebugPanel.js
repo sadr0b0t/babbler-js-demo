@@ -105,13 +105,13 @@ var BabblerDebugPanel = React.createClass({
         var params = cmdParts;
         
         this.props.babblerDevice.sendCmd(cmd, params,
-            // onReply
-            function(cmd, params, reply) {
-                this.setState({reply: reply, error: undefined});
-            }.bind(this),
-            // onError
-            function(cmd, params, err) {
-               this.setState({reply: "-", error: err.message});
+            // onResult
+            function(err, reply, cmd, params) {
+                if(err) {
+                    this.setState({reply: "-", error: err.message});
+                } else {
+                    this.setState({reply: reply, error: undefined});
+                }
             }.bind(this)
         );
         this.setState({
@@ -123,40 +123,40 @@ var BabblerDebugPanel = React.createClass({
     }, 
     
     cmdPing: function() {
-          this.props.babblerDevice.sendCmd("ping", [],
-              // onReply
-              function(cmd, params, reply) {
-                  this.setState({reply: reply, error: undefined});
-              }.bind(this),
-              // onError
-              function(cmd, params, err) {
-                 this.setState({reply: "-", error: err.message});
-              }.bind(this)
-          );
-          this.setState({
-              currCmd: "ping",
-              reply: "",
-              error: ""
-          });
-      },
+        this.props.babblerDevice.sendCmd("ping", [],
+            // onResult
+            function(err, reply, cmd, params) {
+                if(err) {
+                    this.setState({reply: "-", error: err.message});
+                } else {
+                    this.setState({reply: reply, error: undefined});
+                }
+            }.bind(this)
+        );
+        this.setState({
+            currCmd: "ping",
+            reply: "",
+            error: ""
+        });
+    },
       
-      cmdHelp: function() {
-          this.props.babblerDevice.sendCmd("help", ["--list"],
-              // onReply
-              function(cmd, params, reply) {
-                  this.setState({reply: reply, error: undefined});
-              }.bind(this),
-              // onError
-              function(cmd, params, err) {
-                 this.setState({reply: "-", error: err.message});
-              }.bind(this)
-          );
-          this.setState({
-              currCmd: "help --list",
-              reply: "",
-              error: ""
-          });
-      }
+    cmdHelp: function() {
+        this.props.babblerDevice.sendCmd("help", ["--list"],
+            // onResult
+            function(err, reply, cmd, params) {
+                if(err) {
+                    this.setState({reply: "-", error: err.message});
+                } else {
+                    this.setState({reply: reply, error: undefined});
+                }
+            }.bind(this)
+        );
+        this.setState({
+            currCmd: "help --list",
+            reply: "",
+            error: ""
+        });
+    }
 });
 
 

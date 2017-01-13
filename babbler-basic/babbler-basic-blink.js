@@ -1,3 +1,9 @@
+// Мигать лампочкой: посылать устройств команды ledon/ledoff через
+// каждые 3 секунды.
+// Подключиться к устройству через последовательный порт, начать мигать лампочкой. 
+// После отключения (или если устройство не подключено изначально), пытаться 
+// подключиться заново каждые 3 секунды.
+
 var BabblerDevice = require('babbler-js');
 //var BabblerDevice = require('../../babbler-js/src/babbler');
 
@@ -13,27 +19,27 @@ babbler.on('connected', function() {
         if(ledstatus === "on") {
             console.log("send cmd: ledoff");
             babbler.sendCmd("ledoff", [],
-                // onReply
-                function(cmd, params, reply) {
-                    console.log("got reply on '" + cmd + " " + params + "': " + reply);
-                    ledstatus = "off";
-                },
-                // onError
-                function(cmd, params, err) {
-                    console.log("fail with '" + cmd + " " + params + "': " + err);
+                // onResult
+                function(err, reply, cmd, params) {
+                    if(err) {
+                        console.log("fail with '" + cmd + " " + params + "': " + err);
+                    } else {
+                        console.log("got reply on '" + cmd + " " + params + "': " + reply);
+                        ledstatus = "off";
+                    }
                 }
             );
         } else { // ledstatus === "off"
             console.log("send cmd: ledon");
             babbler.sendCmd("ledon", [],
-                // onReply
-                function(cmd, params, reply) {
-                    console.log("got reply on '" + cmd + " " + params + "': " + reply);
-                    ledstatus = "on";
-                },
-                // onError
-                function(cmd, params, err) {
-                    console.log("fail with '" + cmd + " " + params + "': " + err);
+                // onResult
+                function(err, reply, cmd, params) {
+                    if(err) {
+                        console.log("fail with '" + cmd + " " + params + "': " + err);
+                    } else {
+                        console.log("got reply on '" + cmd + " " + params + "': " + reply);
+                        ledstatus = "on";
+                    }
                 }
             );
         }

@@ -1,3 +1,7 @@
+// Простой пример
+// Подключиться к устройству через последовательный порт, отправить две команды:
+// "ping" и "help --list", ожидать отключения устройства
+
 var BabblerDevice = require('babbler-js');
 //var BabblerDevice = require('../../babbler-js/src/babbler');
 
@@ -8,31 +12,31 @@ babbler.on('connected', function() {
     
     console.log("send cmd: ping");
     babbler.sendCmd("ping", [],
-        // onReply
-        function(cmd, params, reply) {
-            console.log("got reply on '" + cmd + " " + params + "': " + reply);
-        },
-        // onError
-        function(cmd, params, err) {
-            console.log("fail with '" + cmd + " " + params + "': " + err);
+        // onResult
+        function(err, reply, cmd, params) {
+            if(err) {
+                console.log("fail with '" + cmd + " " + params + "': " + err);
+            } else {
+                console.log("got reply on '" + cmd + " " + params + "': " + reply);
+            }
         }
     );
     
     console.log("send cmd: help --list");
     babbler.sendCmd("help", ["--list"],
-        // onReply
-        function(cmd, params, reply) {
-            console.log("got reply on '" + cmd + " " + params + "': " + reply);
-        },
-        // onError
-        function(cmd, params, err) {
-            console.log("fail with '" + cmd + " " + params + "': " + err);
+        // onResult
+        function(err, reply, cmd, params) {
+            if(err) {
+                console.log("fail with '" + cmd + " " + params + "': " + err);
+            } else {
+                console.log("got reply on '" + cmd + " " + params + "': " + reply);
+            }
         }
     );
 });
 
-babbler.on('disconnected', function(error) {
-    console.log("disconnected" + (error != undefined ? ": " + error : ""));
+babbler.on('disconnected', function(err) {
+    console.log("disconnected" + (err != undefined ? ": " + err : ""));
 });
 
 babbler.connect("/dev/ttyUSB0");
