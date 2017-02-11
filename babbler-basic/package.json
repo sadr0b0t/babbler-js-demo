@@ -1,7 +1,7 @@
 {
-  "name"    : "babbler-basic",
-  "version" : "0.4.0",
-  "main"    : "babbler-basic.js",
+  "name": "babbler-basic",
+  "version": "0.5.0",
+  "main": "babbler-basic.js",
   "dependencies": {
     "babbler-js": "^0.5.0"
   },
@@ -14,4 +14,3 @@
     ]
   }
 }
-
