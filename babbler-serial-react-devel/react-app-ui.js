@@ -32,7 +32,7 @@ import Subheader from 'material-ui/Subheader';
 // babbler-js как модуль внутри своего кода и мы не хотим это
 // исправлять каждый раз во всех файлах во время разработки.
 // В процессе работы они все равно будут иметь дело только с тем
-// объектом babblerDevice, который мы туда передадим (т.е. с последней
+// объектом babbler, который мы туда передадим (т.е. с последней
 // исправленной версией), зависимость нужна там только для некоторых 
 // констант с именами событий.
 // - Если разрабатываемая версия babbler-js-material-ui все-таки требует 
@@ -49,11 +49,10 @@ import BabblerConnectionStatusIcon from '../../babbler-js-material-ui/src/Babble
 import BabblerConnectionErrorSnackbar from '../../babbler-js-material-ui/src/BabblerConnectionErrorSnackbar';
 import BabblerConnectionPanel from '../../babbler-js-material-ui/src/BabblerConnectionPanel';
 import BabblerDataFlow from '../../babbler-js-material-ui/src/BabblerDataFlow';
-
-import BabblerDebugPanel from './widgets/BabblerDebugPanel';
+import BabblerDebugPanel from '../../babbler-js-material-ui/src/BabblerDebugPanel';
 
 // Babbler.js
-import BabblerDevice from '../../babbler-js/src/babbler';
+import Babbler from '../../babbler-js/src/babbler';
 
 const btnStyle = {
   margin: 12
@@ -66,7 +65,7 @@ var BabblerLedControlPnl = React.createClass({
 
     getInitialState: function() {
         return {
-            deviceStatus: this.props.babblerDevice.deviceStatus(),
+            deviceStatus: this.props.babbler.deviceStatus,
             ledOn: false
         };
     },
@@ -76,16 +75,16 @@ var BabblerLedControlPnl = React.createClass({
         this.deviceStatusListener = function(status) {
             this.setState({deviceStatus: status});
         }.bind(this);
-        this.props.babblerDevice.on(BabblerDevice.Event.STATUS, this.deviceStatusListener);
+        this.props.babbler.on(Babbler.Event.STATUS, this.deviceStatusListener);
     },
     
     componentWillUnmount: function() {
         // почистим слушателей
-        this.props.babblerDevice.removeListener(BabblerDevice.Event.STATUS, this.deviceStatusListener);
+        this.props.babbler.removeListener(Babbler.Event.STATUS, this.deviceStatusListener);
     },
     
     render: function() {
-        var connected = this.state.deviceStatus === BabblerDevice.Status.CONNECTED ? true : false;
+        var connected = this.state.deviceStatus === Babbler.Status.CONNECTED ? true : false;
         return (
             <div style={{textAlign: "center"}}>
                 <div>
@@ -104,7 +103,7 @@ var BabblerLedControlPnl = React.createClass({
     },
     
     cmdLedon: function() {
-        this.props.babblerDevice.sendCmd("ledon", [],
+        this.props.babbler.sendCmd("ledon", [],
             // onResult
             function(err, reply, cmd, params) {
                 if(err) {
@@ -119,7 +118,7 @@ var BabblerLedControlPnl = React.createClass({
     }, 
     
     cmdLedoff: function() {
-        this.props.babblerDevice.sendCmd("ledoff", [],
+        this.props.babbler.sendCmd("ledoff", [],
             // onResult
             function(err, reply, cmd, params) {
                 if(err) {
@@ -135,16 +134,16 @@ var BabblerLedControlPnl = React.createClass({
 });
 
 // Устройство Babbler, подключенное к последовательному порту
-var babblerDevice1 = new BabblerDevice();
+var babbler1 = new Babbler();
 
 // Контент приложения
 ReactDOM.render(
     <MuiThemeProvider muiTheme={getMuiTheme()}>
       <div>
         <Paper>
-            <BabblerConnectionPanel babblerDevice={babblerDevice1}/>
+            <BabblerConnectionPanel babbler={babbler1}/>
             <BabblerConnectionStatusIcon 
-                babblerDevice={babblerDevice1} 
+                babbler={babbler1} 
                 iconSize={50}
                 style={{position: "absolute", right: 0, marginRight: 14, marginTop: 5}} />
         </Paper>
@@ -153,14 +152,14 @@ ReactDOM.render(
         
         <Tabs>
             <Tab label="Лампочки" >
-                <BabblerLedControlPnl babblerDevice={babblerDevice1}/>
+                <BabblerLedControlPnl babbler={babbler1}/>
             </Tab>
             <Tab label="Отладка" >
-                <BabblerDebugPanel babblerDevice={babblerDevice1}/>
+                <BabblerDebugPanel babbler={babbler1}/>
             </Tab>
             <Tab label="Лог" >
                 <BabblerDataFlow 
-                    babblerDevice={babblerDevice1} 
+                    babbler={babbler1} 
                     reverseOrder={true}
                     maxItems={10000}
                     timestamp={true}
@@ -171,7 +170,7 @@ ReactDOM.render(
             </Tab>
         </Tabs>
         
-        <BabblerConnectionErrorSnackbar babblerDevice={babblerDevice1}/>
+        <BabblerConnectionErrorSnackbar babbler={babbler1}/>
       </div>
     </MuiThemeProvider>,
     document.getElementById('app-content')
