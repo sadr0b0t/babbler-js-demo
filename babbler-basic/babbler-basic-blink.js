@@ -4,10 +4,10 @@
 // После отключения (или если устройство не подключено изначально), пытаться 
 // подключиться заново каждые 3 секунды.
 
-var BabblerDevice = require('babbler-js');
-//var BabblerDevice = require('../../babbler-js/src/babbler');
+var Babbler = require('babbler-js');
+//var Babbler = require('../../babbler-js/src/babbler');
 
-var babbler = new BabblerDevice();
+var babbler = new Babbler();
 var blinkIntervalId;
 
 babbler.on('connected', function() {

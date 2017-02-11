@@ -2,10 +2,10 @@
 // Подключиться к устройству через последовательный порт, отправить две команды:
 // "ping" и "help --list", ожидать отключения устройства
 
-var BabblerDevice = require('babbler-js');
-//var BabblerDevice = require('../../babbler-js/src/babbler');
+var Babbler = require('babbler-js');
+//var Babbler = require('../../babbler-js/src/babbler');
 
-var babbler = new BabblerDevice();
+var babbler = new Babbler();
 
 babbler.on('connected', function() {
     console.log("connected");
