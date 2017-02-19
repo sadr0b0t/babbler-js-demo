@@ -155,7 +155,12 @@ ReactDOM.render(
                 <BabblerLedControlPnl babbler={babbler1}/>
             </Tab>
             <Tab label="Отладка" >
-                <BabblerDebugPanel babbler={babbler1}/>
+                <BabblerDebugPanel babbler={babbler1}
+//                    filter={{ err: false, data: false }}
+//                    filter={{ data: {queue: false} }}
+//                    filter={{ err: {in: false, out: false, queue: false}, data: {in: false, out: false, queue: false} }}
+//                    filter={{ data: {content: ['"cmd":"ping"']} }} 
+                />
             </Tab>
             <Tab label="Лог" >
                 <BabblerDataFlow 
@@ -166,6 +171,7 @@ ReactDOM.render(
 //                    filter={{ err: false, data: false }}
 //                    filter={{ data: {queue: false} }}
 //                    filter={{ err: {in: false, out: false, queue: false}, data: {in: false, out: false, queue: false} }}
+//                    filter={{ data: {content: ['"cmd": "ping"']} }}
                     style={{margin: 20}}/>
             </Tab>
         </Tabs>
