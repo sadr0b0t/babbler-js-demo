@@ -75,12 +75,18 @@ var BabblerLedControlPnl = React.createClass({
         this.deviceStatusListener = function(status) {
             this.setState({deviceStatus: status});
         }.bind(this);
+        this.stickedPropListener = function(prop, err, val) {
+            this.setState({ledOn: (val == 'on' ? true : false)});
+        }.bind(this);
+        
         this.props.babbler.on(Babbler.Event.STATUS, this.deviceStatusListener);
+        this.props.babbler.on(Babbler.Event.PROP, this.stickedPropListener);
     },
     
     componentWillUnmount: function() {
         // почистим слушателей
         this.props.babbler.removeListener(Babbler.Event.STATUS, this.deviceStatusListener);
+        this.props.babbler.removeListener(Babbler.Event.PROP, this.stickedPropListener);
     },
     
     render: function() {
@@ -135,6 +141,7 @@ var BabblerLedControlPnl = React.createClass({
 
 // Устройство Babbler, подключенное к последовательному порту
 var babbler1 = new Babbler();
+babbler1.stickProp("ledstatus", "ledstatus", [], 2000);
 
 // Контент приложения
 ReactDOM.render(
@@ -159,7 +166,8 @@ ReactDOM.render(
 //                    filter={{ err: false, data: false }}
 //                    filter={{ data: {queue: false} }}
 //                    filter={{ err: {in: false, out: false, queue: false}, data: {in: false, out: false, queue: false} }}
-//                    filter={{ data: {content: ['"cmd":"ping"']} }} 
+//                    filter={{ data: {content: ['"cmd":"ping"']} }}
+                    filter={{ data: {content: ['"cmd":"ledstatus"']} }}
                 />
             </Tab>
             <Tab label="Лог" >
@@ -171,7 +179,8 @@ ReactDOM.render(
 //                    filter={{ err: false, data: false }}
 //                    filter={{ data: {queue: false} }}
 //                    filter={{ err: {in: false, out: false, queue: false}, data: {in: false, out: false, queue: false} }}
-//                    filter={{ data: {content: ['"cmd": "ping"']} }}
+//                    filter={{ data: {content: ['"cmd":"ping"']} }}
+//                    filter={{ data: {content: ['"cmd":"ledstatus"']} }}
                     style={{margin: 20}}/>
             </Tab>
         </Tabs>
