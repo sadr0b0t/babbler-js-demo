@@ -55,7 +55,9 @@ var BabblerLedControlPnl = React.createClass({
             this.setState({deviceStatus: status});
         }.bind(this);
         this.stickedPropListener = function(prop, err, val) {
-            this.setState({ledOn: (val == 'on' ? true : false)});
+            if(prop === "ledstatus") {
+                this.setState({ledOn: (val == 'on' ? true : false)});
+            }
         }.bind(this);
         
         this.props.babbler.on(Babbler.Event.STATUS, this.deviceStatusListener);
